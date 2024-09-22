@@ -19,7 +19,7 @@ void setup(){
   dangerColor= color(#FC1831, 150);
   promotionColor= color(#F10AFF, 120);
   
-  piecesImages= new HashMap<Character, PImage>();
+  piecesImages= new HashMap<>();
   for (int i=0; i<=1; i++) {
     for (int j=0; j<6; j++) {
       piecesImages.put(sequence[i*6+j], loadImage("pieces/"+i+j+".png"));
@@ -38,10 +38,16 @@ void mousePressed() {
   int i= floor((S*4 + mouseY - height/2.0)/S);
   int j= floor((S*4 + mouseX - height/2.0)/S);
   int index= index(i, j);
-  if(isValid(i, j) && board.pieceAt(index)!=' '){
-    board.selected= index;
-    board.updateAllMoves();
-    println(board.possibleMoves);
+  if(isValid(i, j)){
+    if(board.selected==-1){
+      if(colorOf(board.pieceAt(index)) == 1) {
+        board.selected= index;
+        board.updateAllMoves();
+        println(board.possibleMoves);
+      }
+    } else {
+      board.applyMoveIfValid(i, j);
+    }
   } else {
     board.selected= -1;
   }

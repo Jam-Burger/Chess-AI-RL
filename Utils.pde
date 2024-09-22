@@ -12,8 +12,8 @@ int colorOf(char c) {
   return 0;
 }
 
-String createMoveString(int startI, int startJ, int endI, int endJ) {
-  String move= str(startI) + startJ + endI + endJ;
+String createMoveString(int startI, int startJ, int endI, int endJ, char[][] grid) {
+  String move= str(startI) + startJ + endI + endJ + Character.toUpperCase(grid[endI][endJ]);
   return move;
 }
 
@@ -22,6 +22,7 @@ String standardizeMove(String move, char[][] grid) {
     int j1 = move.charAt(1) - '0';  // Starting column (j1)
     int i2 = move.charAt(2) - '0';  // Target row (i2)
     int j2 = move.charAt(3) - '0';  // Target column (j2)
+    char capturedPiece= move.charAt(4);
 
     // Convert to standard chess notation
     char fromFile = (char) ('a' + j1);  // Starting file
@@ -33,7 +34,7 @@ String standardizeMove(String move, char[][] grid) {
     String moveNotation = "";
 
     // Handle pawn movement
-    char movingPiece= grid[i1][i2];
+    char movingPiece= grid[i1][j1];
     if (movingPiece == 'P') {
         moveNotation += toFile + "" + toRank; // Just the destination for pawns
     } else {
@@ -42,7 +43,7 @@ String standardizeMove(String move, char[][] grid) {
     }
 
     // Check for captures
-    if (grid[i2][j2] != ' ' && colorOf(grid[i2][j2]) == -1) {
+    if (capturedPiece != ' ') {
         if (movingPiece == 'P') {
             moveNotation = fromFile + "x" + moveNotation; // Pawn capture
         } else {
